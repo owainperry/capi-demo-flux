@@ -3,3 +3,11 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
+patches:
+- patch: |
+    - op: add
+      path: "/metadata/annotations/eks.amazonaws.com~1role-arn"
+      value: arn:aws:iam::111111111111:role/kustomize-controller-service-account-cluster-1
+  target:
+    kind: ServiceAccount
+    name: "kustomize-controller"
