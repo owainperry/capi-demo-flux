@@ -1,0 +1,58 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: cluster-autoscaler
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: cluster-autoscaler
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: cluster-autoscaler
+        namespace: flux-system
+      version: '*'
+  install:
+    remediation:
+      retries: 3
+  interval: 1h0m0s
+  releaseName: ca
+  targetNamespace: cluster-autoscaler
+  values:
+    rbac:
+      create: true
+      pspEnabled: false
+      serviceAccount:
+        create: true
+        name: "cluster-autoscaler"
+    replicaCount: 2
+    autoDiscovery:
+      clusterName: "capi-demo"
+      tags:
+        - k8s.io/cluster-autoscaler/enabled
+        - k8s.io/cluster-autoscaler/{{ .Values.autoDiscovery.clusterName }}
+    awsRegion: "eu-west-1"
+    cloudProvider: "aws"
+    extraArgs:
+      cluster-name: "capi-demo"
+      cloud-provider: "aws"
+      logtostderr: true
+      stderrthreshold: info
+      v: 4
+      skip-nodes-with-local-storage: true
+      expander: random
+      scale-down-enabled: true
+      leader-elect: true
+      leader-elect-resource-lock: leases
+      write-status-configmap: true
+      status-config-map-name: cluster-autoscaler-status
+      cordon-node-before-terminating: true
+    image:
+      repository: k8s.gcr.io/autoscaling/cluster-autoscaler
+      tag: v1.21.1
+      pullPolicy: IfNotPresent
+    service:
+      servicePort: 8085
+      portName: http
+      type: ClusterIP

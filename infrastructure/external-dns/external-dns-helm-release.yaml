@@ -1,0 +1,194 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: external-dns
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+      version: '6.2.4'
+  install:
+    remediation:
+      retries: 3
+    createNamespace: true
+  interval: 1h0m0s
+  releaseName: edns
+  targetNamespace: external-dns
+  values:
+    affinity: {}
+    annotationFilter: ""
+    args: []
+    aws:
+      apiRetries: 3
+      assumeRoleArn: ""
+      batchChangeSize: 1000
+      credentials:
+        accessKey: ""
+        mountPath: /.aws
+        secretKey: ""
+        secretName: ""
+      evaluateTargetHealth: ""
+      preferCNAME: ""
+      region: eu-west-1
+      roleArn: ""
+      zoneTags: []
+      zoneType: public
+    clusterDomain: cluster.local
+    combineFQDNAnnotation: false
+    command: []
+    commonAnnotations: {}
+    commonLabels: {}
+    containerPorts:
+      http: 7979
+    containerSecurityContext: {}
+    crd:
+      apiversion: ""
+      create: false
+      kind: ""
+    customLivenessProbe: {}
+    customReadinessProbe: {}
+    customStartupProbe: {}
+    domainFilters:
+    - example.com
+    dryRun: false
+    excludeDomains: []
+    extraArgs: {}
+    extraDeploy: []
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    extraVolumeMounts: []
+    extraVolumes: []
+    forceTxtOwnerId: false
+    fqdnTemplates: []
+    fullnameOverride: ""
+    global:
+      imagePullSecrets: []
+      imageRegistry: ""
+    hostAliases: []
+    ignoreHostnameAnnotation: false
+    image:
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/external-dns
+      tag: 0.10.2-debian-10-r27
+    initContainers: []
+    interval: 1m
+    kubeVersion: ""
+    labelFilter: ""
+    lifecycleHooks: {}
+    livenessProbe:
+      enabled: true
+      failureThreshold: 2
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    logFormat: text
+    logLevel: info
+    metrics:
+      enabled: false
+      podAnnotations: {}
+      serviceMonitor:
+        additionalLabels: {}
+        enabled: false
+        honorLabels: false
+        interval: ""
+        jobLabel: ""
+        metricRelabelings: []
+        namespace: ""
+        relabelings: []
+        scrapeTimeout: ""
+        selector: {}
+    nameOverride: ""
+    namespace: ""
+    nodeAffinityPreset:
+      key: ""
+      type: ""
+      values: []
+    nodeSelector: {}
+    podAffinityPreset: ""
+    podAnnotations: {}
+    podAntiAffinityPreset: soft
+    podDisruptionBudget: {}
+    podLabels: {}
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+      runAsUser: 1001
+    policy: sync
+    priorityClassName: ""
+    provider: aws
+    publishHostIP: false
+    publishInternalServices: false
+    rbac:
+      apiVersion: v1
+      clusterRole: true
+      create: true
+      pspEnabled: false
+    readinessProbe:
+      enabled: true
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    regexDomainExclusion: ""
+    regexDomainFilter: ""
+    registry: txt
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 200m
+        memory: 200Mi
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    schedulerName: ""
+    secretAnnotations: {}
+    service:
+      annotations: {}
+      clusterIP: ""
+      enabled: true
+      externalIPs: []
+      externalTrafficPolicy: Cluster
+      extraPorts: []
+      labels: {}
+      loadBalancerIP: ""
+      loadBalancerSourceRanges: []
+      nodePorts:
+        http: ""
+      ports:
+        http: 7979
+      type: ClusterIP
+    serviceAccount:
+      automountServiceAccountToken: true
+      create: true
+      name: external-dns
+    serviceTypeFilter: []
+    sidecars: []
+    sources:
+    - ingress
+    startupProbe:
+      enabled: false
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    tolerations: []
+    topologySpreadConstraints: []
+    triggerLoopOnEvent: false
+    txtOwnerId: ""
+    txtPrefix: ""
+    txtSuffix: ""
+    updateStrategy: {}
+    zoneIdFilters: []
+    zoneNameFilters: []
